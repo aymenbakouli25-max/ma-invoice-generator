@@ -1,171 +1,285 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShadowCode Elite | المنصة المتكاملة للمقاول الذاتي</title>
+    <title>ShadowCode Ultimate | المنصة المتكاملة للمقاول الذاتي المغربي</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; }
-        :root { --main-color: #0f172a; }
-        .bg-selected { background-color: var(--main-color) !important; color: white !important; }
-        .text-selected { color: var(--main-color) !important; }
-        @media print { .no-print { display: none !important; } body { background: white; } }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap');
+        
+        :root { --p-color: #2563eb; }
+        body { font-family: 'Tajawal', sans-serif; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* تأثيرات الزجاج للوحة التحكم */
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        
+        .invoice-paper { width: 210mm; min-height: 297mm; padding: 20mm; margin: auto; background: white; box-shadow: 0 0 50px rgba(0,0,0,0.1); border-radius: 8px; position: relative; overflow: hidden; }
+        
+        /* تخصيص الطباعة بدقة متناهية */
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .no-print { display: none !important; }
+            .invoice-paper { box-shadow: none; margin: 0; width: 100%; border: none; border-radius: 0; }
+            .print-bg-blue { background-color: var(--p-color) !important; color: white !important; -webkit-print-color-adjust: exact; }
+            @page { size: A4; margin: 0; }
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        
+        .item-row:hover .delete-btn { opacity: 1; }
+        .delete-btn { opacity: 0; transition: 0.2s; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="bg-slate-950 text-slate-200 custom-scroll">
 
-    <nav class="bg-white border-b p-4 sticky top-0 z-50 no-print flex justify-between items-center shadow-sm">
-        <div class="flex items-center gap-2">
-            <span class="text-2xl bg-slate-900 text-white p-2 rounded-lg font-black">S</span>
-            <h1 class="text-xl font-black">SHADOW<span class="text-blue-600">CODE</span> ELITE</h1>
-        </div>
-        <div class="flex gap-4">
-            <button onclick="changeLang('ar')" class="font-bold text-xs">AR</button>
-            <button onclick="changeLang('fr')" class="font-bold text-xs">FR</button>
-            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg hover:bg-blue-700 transition">إصدار PDF</button>
+    <nav class="no-print border-b border-slate-800 bg-slate-950/50 sticky top-0 z-[100] backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4 group cursor-pointer">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/20 group-hover:rotate-12 transition-transform">
+                    <span class="text-2xl font-black text-white italic">S</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-widest uppercase">Shadow<span class="text-blue-500 italic text-2xl">Code</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em]">Ultimate Enterprise Edition</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+                    <button onclick="changeLanguage('ar')" class="px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition uppercase tracking-tighter">العربية</button>
+                    <button onclick="changeLanguage('fr')" class="px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition uppercase tracking-tighter">Français</button>
+                </div>
+                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-black text-sm shadow-2xl shadow-blue-500/30 active:scale-95 transition flex items-center gap-2 uppercase tracking-widest">
+                    <span>Export to PDF</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-10 px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 xl:grid-cols-12 gap-10">
         
-        <aside class="lg:col-span-4 space-y-6 no-print">
-            <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
-                <h2 class="text-lg font-bold mb-6 border-b pb-4">🛠️ إعدادات متقدمة</h2>
+        <aside class="xl:col-span-4 no-print space-y-8 animate-fade-in">
+            <div class="glass p-8 rounded-[2.5rem] shadow-2xl space-y-8 border border-white/5">
                 
-                <div class="space-y-4">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">شعار المقاولة:</label>
-                    <input type="file" id="logo-input" accept="image/*" onchange="loadLogo(event)" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    
-                    <input type="text" id="in-name" oninput="livePreview()" placeholder="اسم المقاول / الشركة" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                    <input type="text" id="in-client" oninput="livePreview()" placeholder="اسم الزبون" class="w-full p-3 border rounded-xl outline-none">
-                    
-                    <div class="pt-6 border-t">
-                        <h3 class="font-bold mb-4 text-blue-600">📦 الخدمات/المنتجات:</h3>
-                        <div id="items-inputs" class="space-y-3">
-                            <div class="flex gap-2">
-                                <input type="text" placeholder="الخدمة" class="item-desc w-2/3 p-2 border rounded-lg text-sm">
-                                <input type="number" placeholder="السعر" class="item-price w-1/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">
-                            </div>
+                <section>
+                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-6">1. Branding & Colors</h3>
+                    <div class="flex items-center justify-between gap-4 p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                        <div class="flex gap-3">
+                            <button onclick="updateTheme('#2563eb')" class="w-10 h-10 rounded-xl bg-blue-600 border-2 border-white/20 hover:scale-110 transition"></button>
+                            <button onclick="updateTheme('#16a34a')" class="w-10 h-10 rounded-xl bg-green-600 border-2 border-white/20 hover:scale-110 transition"></button>
+                            <button onclick="updateTheme('#000000')" class="w-10 h-10 rounded-xl bg-black border-2 border-white/20 hover:scale-110 transition"></button>
+                            <button onclick="updateTheme('#e11d48')" class="w-10 h-10 rounded-xl bg-rose-600 border-2 border-white/20 hover:scale-110 transition"></button>
                         </div>
-                        <button onclick="addItem()" class="mt-4 text-xs font-bold text-blue-600 underline">+ إضافة خدمة أخرى</button>
+                        <label class="flex flex-col items-center cursor-pointer">
+                            <span class="text-[10px] font-bold text-slate-500 mb-1">UPLOAD LOGO</span>
+                            <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center hover:bg-slate-700 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                            </div>
+                            <input type="file" onchange="handleLogo(event)" class="hidden">
+                        </label>
                     </div>
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-2">2. Provider Details</h3>
+                    <input type="text" id="prov-name" oninput="liveUpdate()" placeholder="Professional Name / Company" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="text" id="prov-ice" oninput="liveUpdate()" placeholder="ICE (15 Digits Required)" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm tracking-widest">
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-2">3. Client Info</h3>
+                    <input type="text" id="cli-name" oninput="liveUpdate()" placeholder="Client / Company Name" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-4">4. Services & Items</h3>
+                    <div id="items-container" class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-2">
+                        <div class="item-row flex gap-2 group animate-fade-in">
+                            <input type="text" placeholder="Service Description" class="item-desc flex-grow bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500">
+                            <input type="number" placeholder="Price" class="item-val w-28 bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500 font-bold text-blue-400" oninput="calculateTotal()">
+                            <button onclick="this.parentElement.remove(); calculateTotal();" class="delete-btn p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg">✕</button>
+                        </div>
+                    </div>
+                    <button onclick="addItemRow()" class="w-full py-3 border-2 border-dashed border-slate-800 rounded-2xl text-xs font-black text-slate-500 hover:border-blue-500 hover:text-blue-500 transition-all uppercase tracking-widest">
+                        + Add Line Item
+                    </button>
+                </section>
+
+                <div class="pt-6 border-t border-slate-800/50 flex justify-between items-center text-[10px] text-slate-600 font-bold uppercase">
+                    <p>Local Storage Active</p>
+                    <p>Status: Ready to Export</p>
                 </div>
             </div>
         </aside>
 
-        <div class="lg:col-span-8">
-            <div id="invoice-template" class="bg-white p-16 shadow-2xl min-h-[1050px] relative rounded-sm">
+        <div class="xl:col-span-8 overflow-x-auto pb-10">
+            <div id="invoice-paper" class="invoice-paper text-slate-900">
                 
-                <div class="flex justify-between items-start mb-20 border-b-2 border-slate-900 pb-10">
-                    <div>
-                        <h1 id="txt-title" class="text-6xl font-black text-slate-950 mb-2">فاتورة</h1>
-                        <p class="text-sm font-bold text-slate-400" id="out-inv-num">INV-2026-000</p>
-                    </div>
-                    <img id="out-logo" src="https://via.placeholder.com/100x100?text=LOGO" class="h-24 w-24 object-contain rounded-xl">
-                </div>
+                <div id="theme-bar" class="absolute top-0 left-0 right-0 h-4 print-bg-blue bg-blue-600"></div>
 
-                <div class="grid grid-cols-2 gap-20 mb-20">
+                <div class="flex justify-between items-start mb-16 pt-8">
                     <div>
-                        <h4 id="txt-from" class="text-[10px] font-black text-slate-300 uppercase mb-2">من المقاول:</h4>
-                        <p id="out-name" class="text-2xl font-black text-slate-900 uppercase">اسمك هنا</p>
+                        <h2 id="lang-inv-title" class="text-7xl font-black text-slate-950 uppercase tracking-tighter mb-4">Facture</h2>
+                        <div class="space-y-1 font-mono text-sm text-slate-400">
+                            <p>REF: <span id="out-ref" class="font-bold text-slate-600">XXXX-XXXX</span></p>
+                            <p id="lang-date">DATE: <span id="out-date" class="font-bold text-slate-600">--/--/----</span></p>
+                        </div>
                     </div>
-                    <div class="text-left">
-                        <h4 id="txt-to" class="text-[10px] font-black text-slate-300 uppercase mb-2">إلى الزبون:</h4>
-                        <p id="out-client" class="text-2xl font-black text-slate-900 underline decoration-slate-200">اسم الزبون هنا</p>
+                    <div class="flex flex-col items-end">
+                        <img id="out-logo" src="https://via.placeholder.com/150x150?text=LOGO" class="w-32 h-32 object-contain mb-4 rounded-2xl border-2 border-slate-50 p-2 shadow-sm">
+                        <div id="qrcode-box" class="p-1 border border-slate-100 rounded-lg opacity-50"></div>
                     </div>
                 </div>
 
-                <table class="w-full mb-20">
+                <div class="grid grid-cols-2 gap-16 mb-20">
+                    <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
+                        <h4 id="lang-from" class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4 italic">PRESTATAIRE (DE):</h4>
+                        <p id="out-prov-name" class="text-2xl font-black text-slate-900 uppercase leading-none mb-2">NOM PROFESSIONNEL</p>
+                        <p id="out-prov-ice" class="font-mono text-xs text-slate-400 tracking-widest font-bold">ICE: 000000000000000</p>
+                    </div>
+                    <div class="text-left pt-8">
+                        <h4 id="lang-to" class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 italic text-right">DESTINATAIRE (À):</h4>
+                        <p id="out-cli-name" class="text-3xl font-black text-slate-900 text-right uppercase underline decoration-blue-200 decoration-8 underline-offset-8 leading-tight">NOM DU CLIENT</p>
+                    </div>
+                </div>
+
+                <table class="w-full mb-16">
                     <thead>
-                        <tr class="bg-slate-950 text-white text-xs uppercase font-black">
-                            <th class="p-4 text-right" id="txt-desc">الوصف</th>
-                            <th class="p-4 text-left" id="txt-total-head">المبلغ</th>
+                        <tr class="print-bg-blue bg-blue-600 text-white uppercase text-[10px] font-black tracking-[0.2em]">
+                            <th id="lang-desc" class="p-5 text-right rounded-r-2xl">Désignation des Services</th>
+                            <th id="lang-qty" class="p-5 text-center w-24">Qté</th>
+                            <th id="lang-total" class="p-5 text-left rounded-l-2xl w-40">Montant (MAD)</th>
                         </tr>
                     </thead>
-                    <tbody id="out-items-list" class="text-lg">
-                        </tbody>
+                    <tbody id="out-table-body" class="text-lg">
+                        <tr class="border-b border-slate-100">
+                            <td class="p-6 font-bold text-slate-700">Service Exemple</td>
+                            <td class="p-6 text-center font-mono text-slate-400">1</td>
+                            <td class="p-6 text-left font-black">0.00</td>
+                        </tr>
+                    </tbody>
                 </table>
 
-                <div class="flex justify-end mt-20">
-                    <div class="w-80 bg-slate-950 text-white p-10 rounded-3xl shadow-2xl">
-                        <p class="text-[10px] font-black opacity-50 uppercase mb-2" id="txt-final-total">المجموع الإجمالي</p>
-                        <h2 class="text-4xl font-black"><span id="out-total">0.00</span> <small class="text-sm">د.م</small></h2>
+                <div class="flex justify-end mb-24 mt-32">
+                    <div class="w-96 print-bg-blue bg-blue-600 text-white p-12 rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+                        <p id="lang-final-title" class="text-[10px] font-black text-blue-200 uppercase tracking-[0.3em] mb-4 text-center">TOTAL NET À PAYER</p>
+                        <h2 class="text-5xl font-black text-center tracking-tighter"><span id="out-total">0.00</span> <small class="text-sm font-bold">MAD</small></h2>
                     </div>
                 </div>
 
-                <div class="mt-20 p-4 border-2 border-dashed border-slate-100 rounded-2xl">
-                    <p class="text-xs font-bold text-slate-400 mb-1 italic" id="txt-words">المبلغ بالحروف:</p>
-                    <p id="out-words" class="text-sm font-black text-slate-900">صفر درهم لا غير</p>
+                <div class="p-10 bg-slate-50/50 rounded-[2.5rem] border-2 border-dashed border-slate-100 mb-20">
+                    <p id="lang-words-title" class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-widest italic">Arrêté la présente facture à la somme de :</p>
+                    <p id="out-words" class="text-xl font-black text-slate-900 leading-relaxed uppercase">ZERO DIRHAMS ET ZERO CENTIMES.</p>
                 </div>
 
-                <div class="absolute bottom-10 left-10 right-10 text-[8px] text-slate-300 font-bold border-t pt-4 flex justify-between">
-                    <span>Generated by ShadowCode Elite v4.0</span>
-                    <span>Document ID: <span id="doc-id"></span></span>
+                <div class="flex justify-between items-end border-t border-slate-100 pt-10 text-[9px] text-slate-300 font-bold uppercase tracking-widest">
+                    <p>Signature & Cachet (Non Obligatoire pour AE)</p>
+                    <p>ShadowCode Ultimate v5.0 - Secure Document</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        function addItem() {
-            const container = document.getElementById('items-inputs');
+        // --- 1. Global State ---
+        let currentLang = 'fr';
+        const qrcode = new QRCode(document.getElementById("qrcode-box"), { width: 60, height: 60 });
+
+        // --- 2. Language Engine ---
+        const dictionary = {
+            ar: { title: "فاتورة", date: "التاريخ", from: "من طرف المقاول:", to: "موجهة إلى السيد(ة):", desc: "بيان الخدمات والمنتجات", qty: "الكمية", total: "المجموع الإجمالي", finalTitle: "المبلغ الإجمالي للأداء", wordsTitle: "أوقفت هذه الفاتورة في المبلغ التالي :", zero: "صفر درهم لا غير" },
+            fr: { title: "Facture", date: "DATE", from: "PRESTATAIRE (DE):", to: "DESTINATAIRE (À):", desc: "Désignation des Services", qty: "Qté", total: "Montant (MAD)", finalTitle: "TOTAL NET À PAYER", wordsTitle: "Arrêté la présente facture à la somme de :", zero: "ZERO DIRHAMS ET ZERO CENTIMES." }
+        };
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            const t = dictionary[lang];
+            document.getElementById('lang-inv-title').innerText = t.title;
+            document.getElementById('lang-date').innerHTML = `${t.date}: <span id="out-date" class="font-bold text-slate-600">${new Date().toLocaleDateString()}</span>`;
+            document.getElementById('lang-from').innerText = t.from;
+            document.getElementById('lang-to').innerText = t.to;
+            document.getElementById('lang-desc').innerText = t.desc;
+            document.getElementById('lang-qty').innerText = t.qty;
+            document.getElementById('lang-total').innerText = t.total;
+            document.getElementById('lang-final-title').innerText = t.finalTitle;
+            document.getElementById('lang-words-title').innerText = t.wordsTitle;
+            calculateTotal();
+        }
+
+        // --- 3. Functional Logic ---
+        function handleLogo(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (f) => { document.getElementById('out-logo').src = f.target.result; };
+            reader.readAsDataURL(file);
+        }
+
+        function updateTheme(color) {
+            document.documentElement.style.setProperty('--p-color', color);
+            document.getElementById('theme-bar').style.backgroundColor = color;
+        }
+
+        function addItemRow() {
+            const container = document.getElementById('items-container');
             const div = document.createElement('div');
-            div.className = 'flex gap-2 animate-fade';
-            div.innerHTML = `<input type="text" placeholder="الخدمة" class="item-desc w-2/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">
-                             <input type="number" placeholder="السعر" class="item-price w-1/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">`;
+            div.className = "item-row flex gap-2 group animate-fade-in";
+            div.innerHTML = `
+                <input type="text" placeholder="Service Description" class="item-desc flex-grow bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500">
+                <input type="number" placeholder="Price" class="item-val w-28 bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500 font-bold text-blue-400" oninput="calculateTotal()">
+                <button onclick="this.parentElement.remove(); calculateTotal();" class="delete-btn p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg">✕</button>
+            `;
             container.appendChild(div);
         }
 
-        function calculateAll() {
+        function calculateTotal() {
             const descs = document.querySelectorAll('.item-desc');
-            const prices = document.querySelectorAll('.item-price');
-            const list = document.getElementById('out-items-list');
+            const vals = document.querySelectorAll('.item-val');
+            const table = document.getElementById('out-table-body');
             let total = 0;
-            list.innerHTML = '';
+            table.innerHTML = '';
 
             descs.forEach((d, i) => {
-                const price = parseFloat(prices[i].value) || 0;
-                if(d.value || price > 0) {
-                    total += price;
-                    list.innerHTML += `<tr class="border-b border-slate-100"><td class="p-4 font-bold text-slate-700">${d.value || 'خدمة'}</td><td class="p-4 text-left font-black">${price.toFixed(2)} د.م</td></tr>`;
+                const val = parseFloat(vals[i].value) || 0;
+                if(d.value || val > 0) {
+                    total += val;
+                    const row = `
+                        <tr class="border-b border-slate-100">
+                            <td class="p-6 font-bold text-slate-700 uppercase text-sm tracking-wide">${d.value || 'Sans Description'}</td>
+                            <td class="p-6 text-center font-mono text-slate-400">01</td>
+                            <td class="p-6 text-left font-black text-xl">${val.toFixed(2)}</td>
+                        </tr>
+                    `;
+                    table.innerHTML += row;
                 }
             });
 
-            document.getElementById('out-total').innerText = total.toLocaleString('fr-MA', {minimumFractionDigits: 2});
-            document.getElementById('out-words').innerText = total > 0 ? (total + " درهم مغربي") : "صفر درهم";
-            livePreview();
+            document.getElementById('out-total').innerText = total.toLocaleString('fr-MA', { minimumFractionDigits: 2 });
+            document.getElementById('out-words').innerText = total > 0 ? (total.toFixed(2) + " DIRHAMS.") : dictionary[currentLang].zero;
+            
+            qrcode.makeCode(`INV: ${total.toFixed(2)} MAD | DATE: ${new Date().toLocaleDateString()}`);
+            liveUpdate();
         }
 
-        function loadLogo(event) {
-            const output = document.getElementById('out-logo');
-            output.src = URL.createObjectURL(event.target.files[0]);
+        function liveUpdate() {
+            document.getElementById('out-prov-name').innerText = document.getElementById('prov-name').value || 'NOM PROFESSIONNEL';
+            document.getElementById('out-prov-ice').innerText = 'ICE: ' + (document.getElementById('prov-ice').value || '000000000000000');
+            document.getElementById('out-cli-name').innerText = document.getElementById('cli-name').value || 'NOM DU CLIENT';
         }
 
-        function livePreview() {
-            document.getElementById('out-name').innerText = document.getElementById('in-name').value || 'اسمك هنا';
-            document.getElementById('out-client').innerText = document.getElementById('in-client').value || 'اسم الزبون هنا';
-        }
-
-        function changeLang(lang) {
-            const isFr = lang === 'fr';
-            document.documentElement.dir = isFr ? 'ltr' : 'rtl';
-            const t = isFr ? {title: "FACTURE", from: "De:", to: "À:", desc: "Description", total: "Total", final: "NET À PAYER"} : {title: "فاتورة", from: "من المقاول:", to: "إلى الزبون:", desc: "الوصف", total: "المبلغ", final: "المجموع الإجمالي"};
-            document.getElementById('txt-title').innerText = t.title;
-            document.getElementById('txt-from').innerText = t.from;
-            document.getElementById('txt-to').innerText = t.to;
-            document.getElementById('txt-desc').innerText = t.desc;
-            document.getElementById('txt-total-head').innerText = t.total;
-            document.getElementById('txt-final-total').innerText = t.final;
-        }
-
+        // --- 4. Init ---
         window.onload = () => {
-            document.getElementById('doc-id').innerText = Math.random().toString(36).substring(7).toUpperCase();
-            document.getElementById('out-inv-num').innerText = 'INV-2026-' + Math.floor(1000 + Math.random() * 9000);
-            calculateAll();
-        }
+            document.getElementById('out-ref').innerText = `${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            changeLanguage('fr');
+        };
     </script>
 </body>
 </html>
