@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد فواتير المقاول الذاتي - ShadowCode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-10">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <div class="flex justify-between items-center border-b pb-6 mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-blue-700">فاتورة رقم #1</h1>
+                <p class="text-sm text-gray-500 mt-1">تاريخ اليوم: <span id="currentDate"></span></p>
+            </div>
+            <div class="text-left font-mono text-xs text-gray-400 no-print">ShadowCodeDZ Project</div>
+        </div>
+
+        <div class="no-print space-y-4 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="name" placeholder="اسمك الكامل / اسم الشركة" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" id="ice" placeholder="رقم المقاول الذاتي (ICE/ID)" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" id="client" placeholder="اسم الزبون" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="number" id="amount" placeholder="المبلغ الإجمالي (درهم)" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <button onclick="updateInvoice()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">توليد الفاتورة</button>
+        </div>
+
+        <div id="invoiceArea">
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="font-bold text-gray-600 underline">من:</h3>
+                    <p id="fromName" class="text-lg font-semibold">-</p>
+                    <p id="fromID" class="text-sm text-gray-500 italic">-</p>
+                </div>
+                <div class="text-left">
+                    <h3 class="font-bold text-gray-600 underline text-right">إلى:</h3>
+                    <p id="toClient" class="text-lg font-semibold text-right">-</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-6 rounded-lg text-center">
+                <p class="text-sm text-gray-600 mb-2 font-bold">المبلغ المطلوب أداؤه</p>
+                <h2 class="text-4xl font-black text-gray-900"><span id="finalAmount">0</span> <small class="text-lg">درهم</small></h2>
+            </div>
+        </div>
+
+        <div class="mt-10 flex gap-4 no-print">
+            <button onclick="window.print()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 shadow-md">طباعة الفاتورة (PDF)</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('ar-MA');
+        function updateInvoice() {
+            document.getElementById('fromName').innerText = document.getElementById('name').value || 'اسمك هنا';
+            document.getElementById('fromID').innerText = 'المعرف الضريبي: ' + (document.getElementById('ice').value || '00000');
+            document.getElementById('toClient').innerText = document.getElementById('client').value || 'اسم الزبون هنا';
+            document.getElementById('finalAmount').innerText = document.getElementById('amount').value || '0';
+        }
+    </script>
+</body>
+</html>
