@@ -1,0 +1,22 @@
+name: Manga-Auto-Update
+on:
+  workflow_dispatch: # هذا السطر يظهر لك "الزر اليدوي" لتشغيل الروبوت الآن
+  schedule:
+    - cron: '0 */12 * * *' # يعمل تلقائياً كل 12 ساعة
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # جلب كود المشروع
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install # تحميل المكتبات (axios, cheerio, supabase)
+        
+      - name: Run Scraper
+        run: node scraper.js # تشغيل الروبوت الذي برمجناه
