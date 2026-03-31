@@ -1,45 +1,51 @@
+const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// إعداد الـ User Agent للتخفي (كأنك متصفح Chrome على Windows)
-const config = {
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
-        'Referer': 'https://lek-manga.net/'
-    }
-};
+// المفاتيح الحقيقية للروبوت
+const supabase = createClient(
+    'https://dsjxjvyjscoxgnjhmnjf.supabase.co', 
+    'sb_secret_A6Qn7bqRd0knPuf7_mn_JQ_QyMbtaNH' // مفتاح السكرت السري
+);
 
-const BASE_URL = 'https://lek-manga.net/';
-
-async function scrapeEverything() {
+async function startScraping() {
     try {
-        console.log("🔍 جاري جلب "الكل شيء" من مانجا ليك...");
-        
-        const { data } = await axios.get(BASE_URL, config);
-        const $ = cheerio.load(data);
-        
-        let results = [];
-
-        $('.page-item-detail').each((i, el) => {
-            const manga = {
-                title: $(el).find('.post-title h3 a').text().trim(),
-                link: $(el).find('.post-title h3 a').attr('href'),
-                cover: $(el).find('img').attr('data-src') || $(el).find('img').attr('src'),
-                latestChapter: $(el).find('.chapter a').first().text().trim()
-            };
-            if(manga.title) results.push(manga);
+        console.log("📡 جاري الاتصال بموقع مانجا ليك...");
+        const { data } = await axios.get('https://lek-manga.net/', {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36' }
         });
+        const $ = cheerio.load(data);
 
-        console.log("✅ تم استخراج " + results.length + " مانهوا.");
-        console.log(JSON.stringify(results, null, 2));
-        
-        // هنا يمكنك إضافة كود الحفظ في Supabase كما شرحنا سابقاً
-        return results;
+        $('.page-item-detail').each(async (i, el) => {
+            const title = $(el).find('.post-title h3 a').text().trim();
+            const cover = $(el).find('img').attr('data-src') || $(el).find('img').attr('src');
+            const chapter = $(el).find('.chapter a').first().text().trim();
+            const chapterLink = $(el).find('.chapter a').first().attr('href');
 
-    } catch (error) {
-        console.error("❌ الموقع حظر الاتصال أو الرابط تغير. تأكد من الـ Referer.");
-    }
+            if (title && chapterLink) {
+                // جلب الصور داخل الفصل
+                const chPage = await axios.get(chapterLink);
+                const ch$ = cheerio.load(chPage.data);
+                let images = [];
+                ch$('.reading-content img').each((j, img) => {
+                    let src = ch$(img).attr('src')?.trim();
+                    if(src) images.push(src);
+                });
+
+                // حفظ في Supabase
+                const { error } = await supabase.from('manga').upsert({
+                    title: title,
+                    cover_url: cover,
+                    latest_chapter: chapter,
+                    images_json: JSON.stringify(images),
+                    updated_at: new Date()
+                }, { onConflict: 'title' });
+
+                if(!error) console.log(`✅ تم تحديث: ${title}`);
+                else console.log(`❌ خطأ في ${title}: ${error.message}`);
+            }
+        });
+    } catch (err) { console.error("❌ عطل تقني:", err.message); }
 }
 
-scrapeEverything();
+startScraping();
