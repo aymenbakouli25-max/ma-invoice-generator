@@ -3,283 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShadowCode Ultimate | المنصة المتكاملة للمقاول الذاتي المغربي</title>
-    
+    <title>ShadowManga | عالم المانجا والمانهوا</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap');
-        
-        :root { --p-color: #2563eb; }
-        body { font-family: 'Tajawal', sans-serif; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        /* تأثيرات الزجاج للوحة التحكم */
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        
-        .invoice-paper { width: 210mm; min-height: 297mm; padding: 20mm; margin: auto; background: white; box-shadow: 0 0 50px rgba(0,0,0,0.1); border-radius: 8px; position: relative; overflow: hidden; }
-        
-        /* تخصيص الطباعة بدقة متناهية */
-        @media print {
-            body { background: white; padding: 0; margin: 0; }
-            .no-print { display: none !important; }
-            .invoice-paper { box-shadow: none; margin: 0; width: 100%; border: none; border-radius: 0; }
-            .print-bg-blue { background-color: var(--p-color) !important; color: white !important; -webkit-print-color-adjust: exact; }
-            @page { size: A4; margin: 0; }
-        }
-
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        
-        .item-row:hover .delete-btn { opacity: 1; }
-        .delete-btn { opacity: 0; transition: 0.2s; }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: white; }
+        .manga-card:hover img { transform: scale(1.1); }
+        .glass-nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-200 custom-scroll">
+<body>
 
-    <nav class="no-print border-b border-slate-800 bg-slate-950/50 sticky top-0 z-[100] backdrop-blur-md">
-        <div class="max-w-[1600px] mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-4 group cursor-pointer">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/20 group-hover:rotate-12 transition-transform">
-                    <span class="text-2xl font-black text-white italic">S</span>
-                </div>
-                <div>
-                    <h1 class="text-xl font-black tracking-widest uppercase">Shadow<span class="text-blue-500 italic text-2xl">Code</span></h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em]">Ultimate Enterprise Edition</p>
-                </div>
+    <nav class="glass-nav fixed top-0 w-full z-50 p-4 border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-black text-blue-500 tracking-tighter">SHADOW<span class="text-white">MANGA</span></h1>
+            <div class="hidden md:flex gap-8 text-sm font-bold">
+                <a href="#" class="text-blue-500">الرئيسية</a>
+                <a href="#" class="hover:text-blue-400 transition">قائمة المانجا</a>
+                <a href="#" class="hover:text-blue-400 transition">أحدث الفصول</a>
             </div>
-            
-            <div class="flex items-center gap-6">
-                <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
-                    <button onclick="changeLanguage('ar')" class="px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition uppercase tracking-tighter">العربية</button>
-                    <button onclick="changeLanguage('fr')" class="px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition uppercase tracking-tighter">Français</button>
-                </div>
-                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-black text-sm shadow-2xl shadow-blue-500/30 active:scale-95 transition flex items-center gap-2 uppercase tracking-widest">
-                    <span>Export to PDF</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                </button>
+            <div class="relative">
+                <input type="text" placeholder="ابحث عن مانجا..." class="bg-slate-800 border border-white/10 px-6 py-2 rounded-full text-xs outline-none focus:border-blue-500 w-48 lg:w-64">
             </div>
         </div>
     </nav>
 
-    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 xl:grid-cols-12 gap-10">
-        
-        <aside class="xl:col-span-4 no-print space-y-8 animate-fade-in">
-            <div class="glass p-8 rounded-[2.5rem] shadow-2xl space-y-8 border border-white/5">
-                
-                <section>
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-6">1. Branding & Colors</h3>
-                    <div class="flex items-center justify-between gap-4 p-4 bg-slate-900/50 rounded-2xl border border-white/5">
-                        <div class="flex gap-3">
-                            <button onclick="updateTheme('#2563eb')" class="w-10 h-10 rounded-xl bg-blue-600 border-2 border-white/20 hover:scale-110 transition"></button>
-                            <button onclick="updateTheme('#16a34a')" class="w-10 h-10 rounded-xl bg-green-600 border-2 border-white/20 hover:scale-110 transition"></button>
-                            <button onclick="updateTheme('#000000')" class="w-10 h-10 rounded-xl bg-black border-2 border-white/20 hover:scale-110 transition"></button>
-                            <button onclick="updateTheme('#e11d48')" class="w-10 h-10 rounded-xl bg-rose-600 border-2 border-white/20 hover:scale-110 transition"></button>
-                        </div>
-                        <label class="flex flex-col items-center cursor-pointer">
-                            <span class="text-[10px] font-bold text-slate-500 mb-1">UPLOAD LOGO</span>
-                            <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center hover:bg-slate-700 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                            </div>
-                            <input type="file" onchange="handleLogo(event)" class="hidden">
-                        </label>
-                    </div>
-                </section>
-
-                <section class="space-y-4">
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-2">2. Provider Details</h3>
-                    <input type="text" id="prov-name" oninput="liveUpdate()" placeholder="Professional Name / Company" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
-                    <input type="text" id="prov-ice" oninput="liveUpdate()" placeholder="ICE (15 Digits Required)" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm tracking-widest">
-                </section>
-
-                <section class="space-y-4">
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-2">3. Client Info</h3>
-                    <input type="text" id="cli-name" oninput="liveUpdate()" placeholder="Client / Company Name" class="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
-                </section>
-
-                <section class="space-y-4">
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-4">4. Services & Items</h3>
-                    <div id="items-container" class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-2">
-                        <div class="item-row flex gap-2 group animate-fade-in">
-                            <input type="text" placeholder="Service Description" class="item-desc flex-grow bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500">
-                            <input type="number" placeholder="Price" class="item-val w-28 bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500 font-bold text-blue-400" oninput="calculateTotal()">
-                            <button onclick="this.parentElement.remove(); calculateTotal();" class="delete-btn p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg">✕</button>
-                        </div>
-                    </div>
-                    <button onclick="addItemRow()" class="w-full py-3 border-2 border-dashed border-slate-800 rounded-2xl text-xs font-black text-slate-500 hover:border-blue-500 hover:text-blue-500 transition-all uppercase tracking-widest">
-                        + Add Line Item
-                    </button>
-                </section>
-
-                <div class="pt-6 border-t border-slate-800/50 flex justify-between items-center text-[10px] text-slate-600 font-bold uppercase">
-                    <p>Local Storage Active</p>
-                    <p>Status: Ready to Export</p>
-                </div>
-            </div>
-        </aside>
-
-        <div class="xl:col-span-8 overflow-x-auto pb-10">
-            <div id="invoice-paper" class="invoice-paper text-slate-900">
-                
-                <div id="theme-bar" class="absolute top-0 left-0 right-0 h-4 print-bg-blue bg-blue-600"></div>
-
-                <div class="flex justify-between items-start mb-16 pt-8">
-                    <div>
-                        <h2 id="lang-inv-title" class="text-7xl font-black text-slate-950 uppercase tracking-tighter mb-4">Facture</h2>
-                        <div class="space-y-1 font-mono text-sm text-slate-400">
-                            <p>REF: <span id="out-ref" class="font-bold text-slate-600">XXXX-XXXX</span></p>
-                            <p id="lang-date">DATE: <span id="out-date" class="font-bold text-slate-600">--/--/----</span></p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end">
-                        <img id="out-logo" src="https://via.placeholder.com/150x150?text=LOGO" class="w-32 h-32 object-contain mb-4 rounded-2xl border-2 border-slate-50 p-2 shadow-sm">
-                        <div id="qrcode-box" class="p-1 border border-slate-100 rounded-lg opacity-50"></div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-16 mb-20">
-                    <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                        <h4 id="lang-from" class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4 italic">PRESTATAIRE (DE):</h4>
-                        <p id="out-prov-name" class="text-2xl font-black text-slate-900 uppercase leading-none mb-2">NOM PROFESSIONNEL</p>
-                        <p id="out-prov-ice" class="font-mono text-xs text-slate-400 tracking-widest font-bold">ICE: 000000000000000</p>
-                    </div>
-                    <div class="text-left pt-8">
-                        <h4 id="lang-to" class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 italic text-right">DESTINATAIRE (À):</h4>
-                        <p id="out-cli-name" class="text-3xl font-black text-slate-900 text-right uppercase underline decoration-blue-200 decoration-8 underline-offset-8 leading-tight">NOM DU CLIENT</p>
-                    </div>
-                </div>
-
-                <table class="w-full mb-16">
-                    <thead>
-                        <tr class="print-bg-blue bg-blue-600 text-white uppercase text-[10px] font-black tracking-[0.2em]">
-                            <th id="lang-desc" class="p-5 text-right rounded-r-2xl">Désignation des Services</th>
-                            <th id="lang-qty" class="p-5 text-center w-24">Qté</th>
-                            <th id="lang-total" class="p-5 text-left rounded-l-2xl w-40">Montant (MAD)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="out-table-body" class="text-lg">
-                        <tr class="border-b border-slate-100">
-                            <td class="p-6 font-bold text-slate-700">Service Exemple</td>
-                            <td class="p-6 text-center font-mono text-slate-400">1</td>
-                            <td class="p-6 text-left font-black">0.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="flex justify-end mb-24 mt-32">
-                    <div class="w-96 print-bg-blue bg-blue-600 text-white p-12 rounded-[3.5rem] shadow-2xl relative overflow-hidden group">
-                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-                        <p id="lang-final-title" class="text-[10px] font-black text-blue-200 uppercase tracking-[0.3em] mb-4 text-center">TOTAL NET À PAYER</p>
-                        <h2 class="text-5xl font-black text-center tracking-tighter"><span id="out-total">0.00</span> <small class="text-sm font-bold">MAD</small></h2>
-                    </div>
-                </div>
-
-                <div class="p-10 bg-slate-50/50 rounded-[2.5rem] border-2 border-dashed border-slate-100 mb-20">
-                    <p id="lang-words-title" class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-widest italic">Arrêté la présente facture à la somme de :</p>
-                    <p id="out-words" class="text-xl font-black text-slate-900 leading-relaxed uppercase">ZERO DIRHAMS ET ZERO CENTIMES.</p>
-                </div>
-
-                <div class="flex justify-between items-end border-t border-slate-100 pt-10 text-[9px] text-slate-300 font-bold uppercase tracking-widest">
-                    <p>Signature & Cachet (Non Obligatoire pour AE)</p>
-                    <p>ShadowCode Ultimate v5.0 - Secure Document</p>
-                </div>
-            </div>
+    <header class="h-[450px] relative flex items-end p-10 overflow-hidden mt-16">
+        <img src="https://images.alphacoders.com/605/605592.jpg" class="absolute inset-0 w-full h-full object-cover opacity-30" alt="Hero">
+        <div class="relative z-10 max-w-2xl space-y-4 animate__animated animate__fadeInUp">
+            <span class="bg-blue-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">الأكثر قراءة</span>
+            <h2 class="text-6xl font-black italic">ONE PIECE</h2>
+            <p class="text-slate-400 text-sm leading-relaxed">انطلق في مغامرة ملك القراصنة القادم، الفصل الأخير متوفر الآن حصرياً.</p>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-2xl font-black transition shadow-xl shadow-blue-600/20">اقرأ الفصل 1111</button>
         </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-16 px-4">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-2xl font-black border-r-4 border-blue-600 pr-4 italic uppercase tracking-tighter">أحدث التحديثات 🔥</h3>
+            <a href="#" class="text-xs text-blue-500 font-bold hover:underline">عرض الكل</a>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" id="manga-list">
+            <div class="manga-card group cursor-pointer animate__animated animate__fadeIn">
+                <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] mb-3 shadow-2xl border border-white/5">
+                    <img src="https://m.media-amazon.com/images/I/81S6o30V9VL._AC_UF1000,1000_QL80_.jpg" class="w-full h-full object-cover transition-transform duration-700" alt="Manga">
+                    <div class="absolute bottom-3 right-3 bg-blue-600 px-3 py-1 text-[10px] font-black rounded-lg shadow-lg">الفصل 1111</div>
+                </div>
+                <h4 class="font-bold text-sm truncate group-hover:text-blue-500 transition">One Piece</h4>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="text-[10px] text-yellow-500 font-bold">⭐ 4.9</span>
+                    <span class="text-[10px] text-slate-500 uppercase">Action</span>
+                </div>
+            </div>
+
+            <div class="manga-card group cursor-pointer animate__animated animate__fadeIn" style="animation-delay: 0.1s">
+                <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] mb-3 shadow-2xl border border-white/5">
+                    <img src="https://m.media-amazon.com/images/I/91pLz6-y0eL._AC_UF1000,1000_QL80_.jpg" class="w-full h-full object-cover transition-transform duration-700" alt="Manga">
+                    <div class="absolute bottom-3 right-3 bg-blue-600 px-3 py-1 text-[10px] font-black rounded-lg shadow-lg">الفصل 255</div>
+                </div>
+                <h4 class="font-bold text-sm truncate group-hover:text-blue-500 transition">Jujutsu Kaisen</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-bold">Shonen</p>
+            </div>
+            
+            </div>
     </main>
 
-    <script>
-        // --- 1. Global State ---
-        let currentLang = 'fr';
-        const qrcode = new QRCode(document.getElementById("qrcode-box"), { width: 60, height: 60 });
+    <footer class="p-20 text-center border-t border-white/5 text-slate-600 text-xs">
+        <p>© 2026 SHADOW MANGA - مبرمج مجهول (بصفر درهم)</p>
+        <p class="mt-2 opacity-50 font-mono italic">Crafted with Code & Passion</p>
+    </footer>
 
-        // --- 2. Language Engine ---
-        const dictionary = {
-            ar: { title: "فاتورة", date: "التاريخ", from: "من طرف المقاول:", to: "موجهة إلى السيد(ة):", desc: "بيان الخدمات والمنتجات", qty: "الكمية", total: "المجموع الإجمالي", finalTitle: "المبلغ الإجمالي للأداء", wordsTitle: "أوقفت هذه الفاتورة في المبلغ التالي :", zero: "صفر درهم لا غير" },
-            fr: { title: "Facture", date: "DATE", from: "PRESTATAIRE (DE):", to: "DESTINATAIRE (À):", desc: "Désignation des Services", qty: "Qté", total: "Montant (MAD)", finalTitle: "TOTAL NET À PAYER", wordsTitle: "Arrêté la présente facture à la somme de :", zero: "ZERO DIRHAMS ET ZERO CENTIMES." }
-        };
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            const t = dictionary[lang];
-            document.getElementById('lang-inv-title').innerText = t.title;
-            document.getElementById('lang-date').innerHTML = `${t.date}: <span id="out-date" class="font-bold text-slate-600">${new Date().toLocaleDateString()}</span>`;
-            document.getElementById('lang-from').innerText = t.from;
-            document.getElementById('lang-to').innerText = t.to;
-            document.getElementById('lang-desc').innerText = t.desc;
-            document.getElementById('lang-qty').innerText = t.qty;
-            document.getElementById('lang-total').innerText = t.total;
-            document.getElementById('lang-final-title').innerText = t.finalTitle;
-            document.getElementById('lang-words-title').innerText = t.wordsTitle;
-            calculateTotal();
-        }
-
-        // --- 3. Functional Logic ---
-        function handleLogo(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (f) => { document.getElementById('out-logo').src = f.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        function updateTheme(color) {
-            document.documentElement.style.setProperty('--p-color', color);
-            document.getElementById('theme-bar').style.backgroundColor = color;
-        }
-
-        function addItemRow() {
-            const container = document.getElementById('items-container');
-            const div = document.createElement('div');
-            div.className = "item-row flex gap-2 group animate-fade-in";
-            div.innerHTML = `
-                <input type="text" placeholder="Service Description" class="item-desc flex-grow bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500">
-                <input type="number" placeholder="Price" class="item-val w-28 bg-slate-900 border border-slate-800 p-3 rounded-xl outline-none text-sm focus:border-blue-500 font-bold text-blue-400" oninput="calculateTotal()">
-                <button onclick="this.parentElement.remove(); calculateTotal();" class="delete-btn p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg">✕</button>
-            `;
-            container.appendChild(div);
-        }
-
-        function calculateTotal() {
-            const descs = document.querySelectorAll('.item-desc');
-            const vals = document.querySelectorAll('.item-val');
-            const table = document.getElementById('out-table-body');
-            let total = 0;
-            table.innerHTML = '';
-
-            descs.forEach((d, i) => {
-                const val = parseFloat(vals[i].value) || 0;
-                if(d.value || val > 0) {
-                    total += val;
-                    const row = `
-                        <tr class="border-b border-slate-100">
-                            <td class="p-6 font-bold text-slate-700 uppercase text-sm tracking-wide">${d.value || 'Sans Description'}</td>
-                            <td class="p-6 text-center font-mono text-slate-400">01</td>
-                            <td class="p-6 text-left font-black text-xl">${val.toFixed(2)}</td>
-                        </tr>
-                    `;
-                    table.innerHTML += row;
-                }
-            });
-
-            document.getElementById('out-total').innerText = total.toLocaleString('fr-MA', { minimumFractionDigits: 2 });
-            document.getElementById('out-words').innerText = total > 0 ? (total.toFixed(2) + " DIRHAMS.") : dictionary[currentLang].zero;
-            
-            qrcode.makeCode(`INV: ${total.toFixed(2)} MAD | DATE: ${new Date().toLocaleDateString()}`);
-            liveUpdate();
-        }
-
-        function liveUpdate() {
-            document.getElementById('out-prov-name').innerText = document.getElementById('prov-name').value || 'NOM PROFESSIONNEL';
-            document.getElementById('out-prov-ice').innerText = 'ICE: ' + (document.getElementById('prov-ice').value || '000000000000000');
-            document.getElementById('out-cli-name').innerText = document.getElementById('cli-name').value || 'NOM DU CLIENT';
-        }
-
-        // --- 4. Init ---
-        window.onload = () => {
-            document.getElementById('out-ref').innerText = `${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-            changeLanguage('fr');
-        };
-    </script>
 </body>
 </html>
