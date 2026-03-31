@@ -3,63 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد فواتير المقاول الذاتي - ShadowCode</title>
+    
+    <title>مولد فواتير المقاول الذاتي المغربي - مجاني 100% | ShadowCode</title>
+    <meta name="description" content="أفضل أداة مجانية لإنشاء فواتير المقاول الذاتي في المغرب. صمم فاتورتك الاحترافية وحملها بصيغة PDF بسرعة وسهولة.">
+    <meta name="keywords" content="فاتورة المقاول الذاتي، نموذج فاتورة المغرب، Auto-entrepreneur Maroc Invoice, إنشاء فاتورة مجانية">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+        .invoice-box { border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
         @media print { .no-print { display: none; } }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 p-4 md:p-10">
-    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-        <div class="flex justify-between items-center border-b pb-6 mb-6">
-            <div>
-                <h1 class="text-3xl font-bold text-blue-700">فاتورة رقم #1</h1>
-                <p class="text-sm text-gray-500 mt-1">تاريخ اليوم: <span id="currentDate"></span></p>
-            </div>
-            <div class="text-left font-mono text-xs text-gray-400 no-print">ShadowCodeDZ Project</div>
-        </div>
+<body class="bg-slate-100 text-slate-800 antialiased">
 
-        <div class="no-print space-y-4 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="name" placeholder="اسمك الكامل / اسم الشركة" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="text" id="ice" placeholder="رقم المقاول الذاتي (ICE/ID)" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="text" id="client" placeholder="اسم الزبون" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="number" id="amount" placeholder="المبلغ الإجمالي (درهم)" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-            <button onclick="updateInvoice()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">توليد الفاتورة</button>
+    <nav class="bg-blue-800 text-white p-4 shadow-md no-print">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black tracking-tighter">SHADOW<span class="text-blue-300">CODE</span></h1>
+            <div class="text-sm bg-blue-700 px-3 py-1 rounded-full text-blue-100">أدوات المقاول الذاتي v1.0</div>
         </div>
+    </nav>
 
-        <div id="invoiceArea">
-            <div class="grid grid-cols-2 gap-8 mb-8">
-                <div>
-                    <h3 class="font-bold text-gray-600 underline">من:</h3>
-                    <p id="fromName" class="text-lg font-semibold">-</p>
-                    <p id="fromID" class="text-sm text-gray-500 italic">-</p>
+    <main class="max-w-5xl mx-auto py-8 px-4">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 space-y-6 no-print">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span>📝</span> بيانات الفاتورة
+                    </h2>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">اسمك أو اسم المقاولة</label>
+                            <input type="text" id="in-name" oninput="livePreview()" placeholder="مثال: أيمن للمعلوماتية" class="w-full p-2.5 bg-slate-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">رقم ICE أو المعرف</label>
+                            <input type="text" id="in-ice" oninput="livePreview()" placeholder="ICE: 12345678" class="w-full p-2.5 bg-slate-50 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">اسم الزبون</label>
+                            <input type="text" id="in-client" oninput="livePreview()" placeholder="شركة الخدمات الشاملة" class="w-full p-2.5 bg-slate-50 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">المبلغ الإجمالي (درهم)</label>
+                            <input type="number" id="in-amount" oninput="livePreview()" placeholder="0.00" class="w-full p-2.5 bg-slate-50 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500 font-bold text-blue-600">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 space-y-2">
+                        <button onclick="downloadPDF()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 transition flex items-center justify-center gap-2">
+                            <span>📥</span> تحميل كـ PDF
+                        </button>
+                        <button onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition">
+                            🖨️ طباعة عادية
+                        </button>
+                    </div>
                 </div>
-                <div class="text-left">
-                    <h3 class="font-bold text-gray-600 underline text-right">إلى:</h3>
-                    <p id="toClient" class="text-lg font-semibold text-right">-</p>
+
+                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">💡 حاسبة الضريبة (IR)</h3>
+                    <p class="text-xs text-blue-600 mb-4">احسب المبلغ الصافي بعد اقتطاع ضريبة المقاول الذاتي (0.5% للخدمات).</p>
+                    <div id="tax-result" class="text-sm font-bold text-blue-900 italic">أدخل المبلغ أعلاه للمشاهدة...</div>
                 </div>
             </div>
 
-            <div class="bg-gray-100 p-6 rounded-lg text-center">
-                <p class="text-sm text-gray-600 mb-2 font-bold">المبلغ المطلوب أداؤه</p>
-                <h2 class="text-4xl font-black text-gray-900"><span id="finalAmount">0</span> <small class="text-lg">درهم</small></h2>
+            <div class="lg:col-span-2">
+                <div id="invoice-template" class="bg-white p-12 rounded shadow-2xl invoice-box min-h-[842px] relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 text-[200px] text-slate-50 font-black rotate-12 pointer-events-none">INVOICE</div>
+                    
+                    <div class="relative">
+                        <div class="flex justify-between items-start border-b-4 border-blue-600 pb-8 mb-12">
+                            <div>
+                                <h1 class="text-4xl font-black text-slate-900 mb-2 uppercase">فاتورة</h1>
+                                <p class="text-slate-500 font-mono">INV-2026-001</p>
+                                <p class="text-slate-500 font-mono">التاريخ: <span id="date-val">--/--/----</span></p>
+                            </div>
+                            <div class="text-left">
+                                <p id="out-name" class="text-2xl font-bold text-blue-700 uppercase">اسم المقاولة هنا</p>
+                                <p id="out-ice" class="text-slate-500 italic">ICE: 00000000</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-20 mb-20">
+                            <div class="p-4 bg-slate-50 rounded-lg">
+                                <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">موجهة إلى الزبون:</h4>
+                                <p id="out-client" class="text-lg font-bold text-slate-800 underline decoration-blue-300">اسم الزبون سيظهر هنا</p>
+                            </div>
+                            <div class="text-left">
+                                <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">طريقة الدفع:</h4>
+                                <p class="text-sm font-semibold">تحويل بنكي / نقداً</p>
+                            </div>
+                        </div>
+
+                        <table class="w-full mb-12">
+                            <thead>
+                                <tr class="bg-slate-900 text-white">
+                                    <th class="p-3 text-right rounded-r-lg">الوصف</th>
+                                    <th class="p-3 text-center">الكمية</th>
+                                    <th class="p-3 text-left rounded-l-lg">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-100">
+                                    <td class="p-4 font-semibold text-slate-700">تقديم خدمات مهنية برمجية / تقنية</td>
+                                    <td class="p-4 text-center">1</td>
+                                    <td class="p-4 text-left font-bold"><span id="out-amount-table">0.00</span> د.م</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="flex justify-end mt-20">
+                            <div class="w-64 space-y-3">
+                                <div class="flex justify-between text-slate-500">
+                                    <span>المجموع الصافي:</span>
+                                    <span><span id="out-subtotal">0.00</span> د.م</span>
+                                </div>
+                                <div class="flex justify-between text-slate-500 border-b pb-2">
+                                    <span>الضريبة (0%):</span>
+                                    <span>0.00 د.م</span>
+                                </div>
+                                <div class="flex justify-between text-2xl font-black text-blue-800">
+                                    <span>الإجمالي:</span>
+                                    <span><span id="out-total">0.00</span> د.م</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-32 pt-8 border-t border-slate-100 text-center text-xs text-slate-400">
+                            <p>هذه الفاتورة تم إنشاؤها عبر منصة ShadowCode المستقلة.</p>
+                            <p class="mt-1">شكراً لثقتكم في خدماتنا!</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
 
-        <div class="mt-10 flex gap-4 no-print">
-            <button onclick="window.print()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 shadow-md">طباعة الفاتورة (PDF)</button>
-        </div>
-    </div>
+    <footer class="no-print mt-20 bg-slate-900 text-slate-500 py-10 text-center text-sm border-t border-slate-800">
+        <p>© 2026 ShadowCodeDZ - مبرمج مغربي مستقل</p>
+        <p class="mt-2 flex justify-center gap-4">
+            <a href="#" class="hover:text-blue-400">سياسة الخصوصية</a>
+            <a href="#" class="hover:text-blue-400">اتصل بنا</a>
+        </p>
+    </footer>
 
     <script>
-        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('ar-MA');
-        function updateInvoice() {
-            document.getElementById('fromName').innerText = document.getElementById('name').value || 'اسمك هنا';
-            document.getElementById('fromID').innerText = 'المعرف الضريبي: ' + (document.getElementById('ice').value || '00000');
-            document.getElementById('toClient').innerText = document.getElementById('client').value || 'اسم الزبون هنا';
-            document.getElementById('finalAmount').innerText = document.getElementById('amount').value || '0';
+        // تحديث البيانات لحظياً (Live Preview)
+        function livePreview() {
+            const name = document.getElementById('in-name').value || 'اسم المقاولة هنا';
+            const ice = document.getElementById('in-ice').value || 'ICE: 00000000';
+            const client = document.getElementById('in-client').value || 'اسم الزبون سيظهر هنا';
+            const amount = parseFloat(document.getElementById('in-amount').value) || 0;
+
+            document.getElementById('out-name').innerText = name;
+            document.getElementById('out-ice').innerText = ice;
+            document.getElementById('out-client').innerText = client;
+            document.getElementById('out-amount-table').innerText = amount.toFixed(2);
+            document.getElementById('out-subtotal').innerText = amount.toFixed(2);
+            document.getElementById('out-total').innerText = amount.toFixed(2);
+            document.getElementById('date-val').innerText = new Date().toLocaleDateString('ar-MA');
+
+            // حاسبة الضريبة السريعة (0.5% للخدمات كمثال)
+            const tax = amount * 0.005;
+            const net = amount - tax;
+            if(amount > 0) {
+                document.getElementById('tax-result').innerHTML = `بعد اقتطاع الضريبة (0.5%): <span class="text-green-600">${net.toFixed(2)} د.م</span>`;
+            }
+        }
+
+        // تحميل الفاتورة كـ PDF احترافي
+        function downloadPDF() {
+            const element = document.getElementById('invoice-template');
+            const opt = {
+                margin:       0.5,
+                filename:     'Invoice_ShadowCode.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
