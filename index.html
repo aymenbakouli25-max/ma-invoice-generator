@@ -1,320 +1,170 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>منصة أدوات المقاول الذاتي المغربي - مجاني 100% | ShadowCode Pro</title>
-    <meta name="description" content="أفضل منصة أدوات مجانية للمقاول الذاتي في المغرب. صمم فاتورتك الاحترافية بصيغة PDF، احسب ضرائبك، وحول العملات بسرعة وسهولة.">
-    <meta name="keywords" content="فاتورة المقاول الذاتي، نموذج فاتورة المغرب، حاسبة ضرائب المغرب، Auto-entrepreneur Maroc, إنشاء فاتورة مجانية, ShadowCode">
-    
+    <title>ShadowCode Elite | المنصة المتكاملة للمقاول الذاتي</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         body { font-family: 'Tajawal', sans-serif; }
-        .invoice-box { border: 1px solid #eee; box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); }
-        @media print { .no-print { display: none; } #invoice-template { padding: 0 !important; box-shadow: none !important; } }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        :root { --main-color: #0f172a; }
+        .bg-selected { background-color: var(--main-color) !important; color: white !important; }
+        .text-selected { color: var(--main-color) !important; }
+        @media print { .no-print { display: none !important; } body { background: white; } }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased font-medium">
+<body class="bg-slate-50 text-slate-900 min-h-screen">
 
-    <nav class="bg-slate-950 text-white p-4 shadow-lg border-b border-slate-800 no-print sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center px-4">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl">🛡️</span>
-                <h1 class="text-2xl font-black tracking-tighter">SHADOW<span class="text-blue-500">CODE</span> <span class="text-xs text-blue-300 font-medium">PRO</span></h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="text-xs bg-slate-800 px-4 py-1.5 rounded-full text-blue-200 border border-slate-700">نسخة المغرب v2.0</div>
-                <img src="https://api.dicebear.com/8.x/rings/svg?seed=ShadowCode" alt="Mage" class="w-10 h-10 rounded-full border-2 border-blue-600 shadow-xl no-print">
-            </div>
+    <nav class="bg-white border-b p-4 sticky top-0 z-50 no-print flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl bg-slate-900 text-white p-2 rounded-lg font-black">S</span>
+            <h1 class="text-xl font-black">SHADOW<span class="text-blue-600">CODE</span> ELITE</h1>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="changeLang('ar')" class="font-bold text-xs">AR</button>
+            <button onclick="changeLang('fr')" class="font-bold text-xs">FR</button>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg hover:bg-blue-700 transition">إصدار PDF</button>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-10 px-6">
+    <main class="max-w-7xl mx-auto py-10 px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <header class="mb-12 no-print border-b border-slate-800 pb-8">
-            <h2 class="text-4xl font-extrabold text-slate-100 flex items-center gap-3">
-                <span>🛠️</span> مركز أدوات المقاول الذاتي
-            </h2>
-            <p class="text-slate-400 mt-2 max-w-2xl">جميع الأدوات التي تحتاجها لتسيير مشروعك بصفتك مقاولاً ذاتياً في المغرب. مجاناً، بدون تسجيل، وبدون تخزين بياناتك.</p>
-            
-            <div class="flex flex-wrap gap-2 mt-8 border border-slate-700 p-2 rounded-2xl bg-slate-950 max-w-lg">
-                <button onclick="switchTab('invoice')" id="tab-invoice-btn" class="tab-btn active flex-1 bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md shadow-blue-900/40">🧾 مولد الفواتير</button>
-                <button onclick="switchTab('tools')" id="tab-tools-btn" class="tab-btn flex-1 bg-slate-800 text-slate-300 font-bold py-3 px-6 rounded-xl hover:bg-slate-700 transition">💡 أدوات إضافية</button>
-            </div>
-        </header>
-
-        <div id="tab-invoice" class="tab-content active grid grid-cols-1 xl:grid-cols-12 gap-10">
-            
-            <div class="xl:col-span-4 space-y-6 no-print">
-                <div class="bg-slate-950 p-8 rounded-3xl shadow-2xl border border-slate-800 sticky top-28">
-                    <h2 class="text-xl font-bold mb-6 text-slate-100 flex items-center gap-3">
-                        <span class="text-blue-500">✏️</span> قم بملء بيانات الفاتورة
-                    </h2>
+        <aside class="lg:col-span-4 space-y-6 no-print">
+            <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                <h2 class="text-lg font-bold mb-6 border-b pb-4">🛠️ إعدادات متقدمة</h2>
+                
+                <div class="space-y-4">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">شعار المقاولة:</label>
+                    <input type="file" id="logo-input" accept="image/*" onchange="loadLogo(event)" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1.5">اسمك الكامل / اسم المقاولة</label>
-                            <input type="text" id="in-name" oninput="livePreview()" placeholder="مثال: مبرمج مغربي مستقل" class="w-full p-3 bg-slate-800 text-slate-100 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1.5">المعرف الضريبي / رقم ICE</label>
-                            <input type="text" id="in-ice" oninput="livePreview()" placeholder="ICE: 12345678" class="w-full p-3 bg-slate-800 text-slate-100 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-mono">
-                        </div>
-                        <div class="pt-4 border-t border-slate-800">
-                            <label class="block text-sm text-slate-400 mb-1.5">اسم الزبون (شركة أو شخص)</label>
-                            <input type="text" id="in-client" oninput="livePreview()" placeholder="مثال: شركة الحلول الرقمية" class="w-full p-3 bg-slate-800 text-slate-100 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-slate-400 mb-1.5">المبلغ الإجمالي (درهم)</label>
-                            <input type="number" id="in-amount" oninput="livePreview()" placeholder="0.00" class="w-full p-4 bg-slate-800 text-2xl border border-blue-600 text-blue-400 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/30 font-extrabold text-blue-600">
-                        </div>
-                    </div>
+                    <input type="text" id="in-name" oninput="livePreview()" placeholder="اسم المقاول / الشركة" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" id="in-client" oninput="livePreview()" placeholder="اسم الزبون" class="w-full p-3 border rounded-xl outline-none">
                     
-                    <div class="mt-8 space-y-3">
-                        <button onclick="downloadPDF()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition flex items-center justify-center gap-3">
-                            <span class="text-xl">📥</span> تحميل الفاتورة (PDF Pro)
-                        </button>
-                        <button onclick="window.print()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-3.5 rounded-xl transition">
-                            🖨️ طباعة سريعة
-                        </button>
-                    </div>
-                    <p class="text-xs text-slate-500 mt-6 text-center">سيتم حفظ بياناتك تلقائياً على جهازك للاستخدام القادم.</p>
-                </div>
-            </div>
-
-            <div class="xl:col-span-8 p-1">
-                <div id="invoice-template" class="bg-white p-16 rounded-lg text-slate-900 shadow-2xl invoice-box min-h-[942px] relative overflow-hidden">
-                    <div class="absolute -top-10 -right-10 text-[200px] text-blue-50 font-black rotate-12 pointer-events-none uppercase">OFFICIAL</div>
-                    
-                    <div class="relative">
-                        <div class="flex justify-between items-start border-b-4 border-blue-600 pb-10 mb-14">
-                            <div>
-                                <h1 class="text-5xl font-black text-slate-950 mb-2 uppercase tracking-tighter">فاتورة</h1>
-                                <p class="text-slate-500 font-mono">الرقم: <span id="out-inv-num">INV-2026-001</span></p>
-                                <p class="text-slate-500 font-mono">تاريخ اليوم: <span id="date-val">--/--/----</span></p>
-                            </div>
-                            <div class="text-left flex items-center gap-4">
-                                <div>
-                                    <p id="out-name" class="text-2xl font-bold text-slate-950 uppercase">اسم المقاولة هنا</p>
-                                    <p id="out-ice" class="text-sm font-mono text-slate-500 italic">ICE: 00000000</p>
-                                </div>
-                                <img src="https://api.dicebear.com/8.x/initials/svg?seed=Shadow" alt="Logo" class="w-20 h-20 rounded-2xl border-2 border-slate-200 shadow-lg">
+                    <div class="pt-6 border-t">
+                        <h3 class="font-bold mb-4 text-blue-600">📦 الخدمات/المنتجات:</h3>
+                        <div id="items-inputs" class="space-y-3">
+                            <div class="flex gap-2">
+                                <input type="text" placeholder="الخدمة" class="item-desc w-2/3 p-2 border rounded-lg text-sm">
+                                <input type="number" placeholder="السعر" class="item-price w-1/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-2 gap-20 mb-20">
-                            <div class="p-6 bg-slate-50 rounded-xl border border-slate-100">
-                                <h4 class="text-xs font-bold text-slate-400 uppercase mb-3 tracking-widest">إلى الزبون السيد/ة:</h4>
-                                <p id="out-client" class="text-2xl font-bold text-slate-950 underline decoration-blue-300 decoration-4">سيظهر اسم الزبون هنا</p>
-                                <p class="text-xs text-slate-400 mt-2">يرجى التأكد من تطابق الاسم مع البيانات القانونية للزبون.</p>
-                            </div>
-                            <div class="text-left space-y-2">
-                                <h4 class="text-xs font-bold text-slate-400 uppercase mb-3 tracking-widest text-right">معلومات الأداء:</h4>
-                                <p class="text-sm font-semibold text-slate-800">طريقة الدفع: <span class="text-blue-600">تحويل بنكي / نقداً</span></p>
-                                <p class="text-xs text-slate-400">يرجى تسوية الفاتورة قبل تاريخ الاستحقاق.</p>
-                            </div>
-                        </div>
-
-                        <table class="w-full mb-16 border-collapse">
-                            <thead>
-                                <tr class="bg-blue-600 text-white rounded-lg">
-                                    <th class="p-4 text-right rounded-r-lg font-extrabold tracking-wider">وصف الخدمة أو المنتج</th>
-                                    <th class="p-4 text-center font-extrabold tracking-wider w-24">الكمية</th>
-                                    <th class="p-4 text-left rounded-l-lg font-extrabold tracking-wider w-40">المبلغ الإجمالي</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b-2 border-slate-100 hover:bg-blue-50 transition">
-                                    <td class="p-5 font-semibold text-slate-800">تقديم خدمات مهنية في مجال البرمجة والتطوير الرقمي (Contract Services)</td>
-                                    <td class="p-5 text-center text-lg font-mono text-slate-600">1</td>
-                                    <td class="p-5 text-left font-black text-slate-950 text-xl"><span id="out-amount-table">0.00</span> د.م</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="flex justify-end mt-20 p-8 bg-slate-50 rounded-2xl border border-slate-100">
-                            <div class="w-72 space-y-4">
-                                <div class="flex justify-between text-slate-600 text-lg">
-                                    <span>المجموع الصافي:</span>
-                                    <span class="font-semibold"><span id="out-subtotal">0.00</span> د.م</span>
-                                </div>
-                                <div class="flex justify-between text-slate-500 border-b pb-3 text-sm italic">
-                                    <span>الضريبة (0% - مقاول ذاتي):</span>
-                                    <span>0.00 د.م</span>
-                                }
-                                <div class="flex justify-between text-3xl font-black text-blue-700 pt-3">
-                                    <span>الإجمالي:</span>
-                                    <span><span id="out-total">0.00</span> د.م</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-40 pt-10 border-t border-slate-100 text-center text-xs text-slate-400 space-y-1 font-mono">
-                            <p>⚠️ هذه الفاتورة تم إنشاؤها عبر منصة ShadowCode Pro المستقلة والمجانية.</p>
-                            <p>المقاول الذاتي في المغرب معفى من الضريبة على القيمة المضافة (TVA) بموجب القانون.</p>
-                            <p class="font-bold text-slate-500 mt-2">شكراً لتعاملكم معنا!</p>
-                        </div>
+                        <button onclick="addItem()" class="mt-4 text-xs font-bold text-blue-600 underline">+ إضافة خدمة أخرى</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <div id="tab-tools" class="tab-content no-print grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-            
-            <div class="bg-slate-950 p-8 rounded-3xl border border-slate-800 space-y-5 shadow-2xl">
-                <div class="flex items-center gap-3">
-                    <span class="text-3xl">💡</span>
-                    <h3 class="text-2xl font-extrabold text-blue-400">حاسبة الضريبة (IR)</h3>
-                </div>
-                <p class="text-sm text-slate-400 mb-6 max-w-md">احسب المبلغ الصافي الذي ستحصل عليه بعد اقتطاع ضريبة المقاول الذاتي المغربية (0.5% للخدمات / 1% للتجارة). أدخل المبلغ الإجمالي لمعرفة النتيجة.</p>
+        <div class="lg:col-span-8">
+            <div id="invoice-template" class="bg-white p-16 shadow-2xl min-h-[1050px] relative rounded-sm">
                 
-                <input type="number" id="calc-amount" placeholder="أدخل المبلغ الإجمالي (درهم)" class="w-full p-4 bg-slate-800 text-slate-100 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold">
-                
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div class="bg-blue-900/30 p-5 rounded-xl border border-blue-700/50">
-                        <p class="text-xs text-blue-300">الصافي (خدمات 0.5%)</p>
-                        <p class="text-2xl font-extrabold text-blue-100 mt-1"><span id="tax-services-net">0.00</span> د.م</p>
+                <div class="flex justify-between items-start mb-20 border-b-2 border-slate-900 pb-10">
+                    <div>
+                        <h1 id="txt-title" class="text-6xl font-black text-slate-950 mb-2">فاتورة</h1>
+                        <p class="text-sm font-bold text-slate-400" id="out-inv-num">INV-2026-000</p>
                     </div>
-                    <div class="bg-green-900/30 p-5 rounded-xl border border-green-700/50">
-                        <p class="text-xs text-green-300">الصافي (تجارة 1%)</p>
-                        <p class="text-2xl font-extrabold text-green-100 mt-1"><span id="tax-commerce-net">0.00</span> د.م</p>
-                    </div>
+                    <img id="out-logo" src="https://via.placeholder.com/100x100?text=LOGO" class="h-24 w-24 object-contain rounded-xl">
                 </div>
-                <button onclick="calculateTaxes()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">حساب الصافي الآن</button>
-            </div>
 
-            <div class="bg-slate-950 p-8 rounded-3xl border border-slate-800 space-y-5 shadow-2xl">
-                <div class="flex items-center gap-3">
-                    <span class="text-3xl">💶</span>
-                    <h3 class="text-2xl font-extrabold text-green-400">محول العملات (درهم 🇲🇦)</h3>
-                </div>
-                <p class="text-sm text-slate-400 mb-6 max-w-md">حول المبالغ من الدرهم المغربي إلى العملات الدولية الرئيسية (الأورو / الدولار). *الأسعار تقريبية بناءً على سعر صرف ثابت.*</p>
-                
-                <input type="number" id="mad-amount" placeholder="المبلغ بالدرهم المغربي (MAD)" class="w-full p-4 bg-slate-800 text-slate-100 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-green-500 font-bold">
-                
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
-                        <p class="text-xs text-slate-400 uppercase">بالأورو (EUR)</p>
-                        <p class="text-2xl font-extrabold text-white mt-1">≈ <span id="euro-net">0.00</span> €</p>
+                <div class="grid grid-cols-2 gap-20 mb-20">
+                    <div>
+                        <h4 id="txt-from" class="text-[10px] font-black text-slate-300 uppercase mb-2">من المقاول:</h4>
+                        <p id="out-name" class="text-2xl font-black text-slate-900 uppercase">اسمك هنا</p>
                     </div>
-                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
-                        <p class="text-xs text-slate-400 uppercase">بالدولار (USD)</p>
-                        <p class="text-2xl font-extrabold text-white mt-1">≈ <span id="usd-net">0.00</span> $</p>
+                    <div class="text-left">
+                        <h4 id="txt-to" class="text-[10px] font-black text-slate-300 uppercase mb-2">إلى الزبون:</h4>
+                        <p id="out-client" class="text-2xl font-black text-slate-900 underline decoration-slate-200">اسم الزبون هنا</p>
                     </div>
                 </div>
-                <button onclick="convertCurrency()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">تحويل العملة الآن</button>
-            </div>
-            
-            <div class="md:col-span-2 text-center mt-12 bg-slate-800/40 p-10 rounded-3xl border border-slate-800">
-                <span class="text-6xl">🚀</span>
-                <h4 class="text-2xl font-bold mt-4">المزيد من الأدوات قادمة!</h4>
-                <p class="text-slate-500 mt-1 max-w-lg mx-auto">نعمل على إضافة حاسبة "عقود الخدمات"، مولد "السيرة الذاتية"، ونظام "تتبع النفقات". تابعنا للحصول على التحديثات.</p>
+
+                <table class="w-full mb-20">
+                    <thead>
+                        <tr class="bg-slate-950 text-white text-xs uppercase font-black">
+                            <th class="p-4 text-right" id="txt-desc">الوصف</th>
+                            <th class="p-4 text-left" id="txt-total-head">المبلغ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="out-items-list" class="text-lg">
+                        </tbody>
+                </table>
+
+                <div class="flex justify-end mt-20">
+                    <div class="w-80 bg-slate-950 text-white p-10 rounded-3xl shadow-2xl">
+                        <p class="text-[10px] font-black opacity-50 uppercase mb-2" id="txt-final-total">المجموع الإجمالي</p>
+                        <h2 class="text-4xl font-black"><span id="out-total">0.00</span> <small class="text-sm">د.م</small></h2>
+                    </div>
+                </div>
+
+                <div class="mt-20 p-4 border-2 border-dashed border-slate-100 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-400 mb-1 italic" id="txt-words">المبلغ بالحروف:</p>
+                    <p id="out-words" class="text-sm font-black text-slate-900">صفر درهم لا غير</p>
+                </div>
+
+                <div class="absolute bottom-10 left-10 right-10 text-[8px] text-slate-300 font-bold border-t pt-4 flex justify-between">
+                    <span>Generated by ShadowCode Elite v4.0</span>
+                    <span>Document ID: <span id="doc-id"></span></span>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer class="no-print mt-32 bg-slate-950 text-slate-600 py-16 text-center text-sm border-t border-slate-800 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl">©️</span>
-                <p>2026 ShadowCode Pro - مشروع مبرمج مغربي مستقل (0 درهم رأس مال)</p>
-            </div>
-            <p class="flex justify-center gap-5">
-                <a href="#" class="hover:text-blue-400 transition">سياسة الخصوصية</a>
-                <a href="#" class="hover:text-blue-400 transition">اتصل بنا (عبر GitHub)</a>
-            </p>
-        </div>
-        <p class="text-xs text-slate-700 mt-6 max-w-xl mx-auto">هذه المنصة لا تخزن أي بيانات خاصة بك. جميع العمليات تتم في متصفحك. تم بناؤها باستخدام Tailwind CSS, jsPDF.</p>
-    </footer>
-
     <script>
-        // تحميل البيانات المحفوظة عند فتح الصفحة (Local Storage)
-        window.onload = function() {
-            if(localStorage.getItem('shadow-name')) document.getElementById('in-name').value = localStorage.getItem('shadow-name');
-            if(localStorage.getItem('shadow-ice')) document.getElementById('in-ice').value = localStorage.getItem('shadow-ice');
-            generateInvoiceNumber();
-            livePreview();
-        };
-
-        // تحديث البيانات لحظياً (Live Preview)
-        function livePreview() {
-            const name = document.getElementById('in-name').value || 'اسم المقاولة هنا';
-            const ice = document.getElementById('in-ice').value || 'ICE: 00000000';
-            const client = document.getElementById('in-client').value || 'اسم الزبون سيظهر هنا';
-            const amount = parseFloat(document.getElementById('in-amount').value) || 0;
-
-            document.getElementById('out-name').innerText = name;
-            document.getElementById('out-ice').innerText = ice;
-            document.getElementById('out-client').innerText = client;
-            document.getElementById('out-amount-table').innerText = amount.toFixed(2);
-            document.getElementById('out-subtotal').innerText = amount.toFixed(2);
-            document.getElementById('out-total').innerText = amount.toFixed(2);
-            document.getElementById('date-val').innerText = new Date().toLocaleDateString('ar-MA');
-
-            // حفظ البيانات تلقائياً
-            if(name !== 'اسم المقاولة هنا') localStorage.setItem('shadow-name', name);
-            if(ice !== 'ICE: 00000000') localStorage.setItem('shadow-ice', ice);
+        function addItem() {
+            const container = document.getElementById('items-inputs');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 animate-fade';
+            div.innerHTML = `<input type="text" placeholder="الخدمة" class="item-desc w-2/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">
+                             <input type="number" placeholder="السعر" class="item-price w-1/3 p-2 border rounded-lg text-sm" oninput="calculateAll()">`;
+            container.appendChild(div);
         }
 
-        // إنشاء رقم فاتورة فريد يومياً
-        function generateInvoiceNumber() {
-            const date = new Date();
-            const year = date.getFullYear();
-            const unique = Math.floor(100 + Math.random() * 900); // رقم عشوائي بين 100 و 999
-            document.getElementById('out-inv-num').innerText = `INV-${year}-${unique}`;
-        }
+        function calculateAll() {
+            const descs = document.querySelectorAll('.item-desc');
+            const prices = document.querySelectorAll('.item-price');
+            const list = document.getElementById('out-items-list');
+            let total = 0;
+            list.innerHTML = '';
 
-        // تحميل الفاتورة كـ PDF احترافي
-        function downloadPDF() {
-            const element = document.getElementById('invoice-template');
-            const invNum = document.getElementById('out-inv-num').innerText;
-            const opt = {
-                margin:       0.2, // هوامش أصغر قليلاً
-                filename:     `Invoice_${invNum}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 }, // جودة عالية
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-
-        // التبديل بين التبويبات (Tabs)
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-blue-700', 'text-white');
-                btn.classList.add('bg-slate-800', 'text-slate-300');
+            descs.forEach((d, i) => {
+                const price = parseFloat(prices[i].value) || 0;
+                if(d.value || price > 0) {
+                    total += price;
+                    list.innerHTML += `<tr class="border-b border-slate-100"><td class="p-4 font-bold text-slate-700">${d.value || 'خدمة'}</td><td class="p-4 text-left font-black">${price.toFixed(2)} د.م</td></tr>`;
+                }
             });
 
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            const activeBtn = document.getElementById(`tab-${tabId}-btn`);
-            activeBtn.classList.add('active', 'bg-blue-700', 'text-white');
-            activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
+            document.getElementById('out-total').innerText = total.toLocaleString('fr-MA', {minimumFractionDigits: 2});
+            document.getElementById('out-words').innerText = total > 0 ? (total + " درهم مغربي") : "صفر درهم";
+            livePreview();
         }
 
-        // أدوات إضافية: حاسبة الضرائب
-        function calculateTaxes() {
-            const amount = parseFloat(document.getElementById('calc-amount').value) || 0;
-            const servicesNet = amount * 0.995; // خصم 0.5%
-            const commerceNet = amount * 0.99;  // خصم 1%
-            document.getElementById('tax-services-net').innerText = servicesNet.toFixed(2);
-            document.getElementById('tax-commerce-net').innerText = commerceNet.toFixed(2);
+        function loadLogo(event) {
+            const output = document.getElementById('out-logo');
+            output.src = URL.createObjectURL(event.target.files[0]);
         }
 
-        // أدوات إضافية: محول العملات
-        function convertCurrency() {
-            const madAmount = parseFloat(document.getElementById('mad-amount').value) || 0;
-            // أسعار ثابتة تقريبية (غير مرتبطة بالـ API المباشر)
-            const eurRate = 0.091; // 1 MAD = ~0.091 EUR
-            const usdRate = 0.098; // 1 MAD = ~0.098 USD
-            document.getElementById('euro-net').innerText = (madAmount * eurRate).toFixed(2);
-            document.getElementById('usd-net').innerText = (madAmount * usdRate).toFixed(2);
+        function livePreview() {
+            document.getElementById('out-name').innerText = document.getElementById('in-name').value || 'اسمك هنا';
+            document.getElementById('out-client').innerText = document.getElementById('in-client').value || 'اسم الزبون هنا';
+        }
+
+        function changeLang(lang) {
+            const isFr = lang === 'fr';
+            document.documentElement.dir = isFr ? 'ltr' : 'rtl';
+            const t = isFr ? {title: "FACTURE", from: "De:", to: "À:", desc: "Description", total: "Total", final: "NET À PAYER"} : {title: "فاتورة", from: "من المقاول:", to: "إلى الزبون:", desc: "الوصف", total: "المبلغ", final: "المجموع الإجمالي"};
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-from').innerText = t.from;
+            document.getElementById('txt-to').innerText = t.to;
+            document.getElementById('txt-desc').innerText = t.desc;
+            document.getElementById('txt-total-head').innerText = t.total;
+            document.getElementById('txt-final-total').innerText = t.final;
+        }
+
+        window.onload = () => {
+            document.getElementById('doc-id').innerText = Math.random().toString(36).substring(7).toUpperCase();
+            document.getElementById('out-inv-num').innerText = 'INV-2026-' + Math.floor(1000 + Math.random() * 9000);
+            calculateAll();
         }
     </script>
 </body>
