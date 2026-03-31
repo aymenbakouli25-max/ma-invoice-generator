@@ -2,7 +2,7 @@ const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// ربط مشروعك الفعلي باستخدام المفتاح السري (Secret Key) من صورتك
+// ربط مشروعك الفعلي (aymenbakouli25-max)
 const supabase = createClient(
     'https://dsjxjvyjscoxgnjhmnjf.supabase.co', 
     'sb_secret_A6Qn7bqRd0knPuf7_mn_JQ_QyMbtaNH'
@@ -10,42 +10,44 @@ const supabase = createClient(
 
 async function startScraping() {
     try {
-        console.log("🚀 جاري سحب المانجا لموقع ShadowManga...");
+        console.log("📡 جاري محاولة سحب البيانات من Mangalek...");
+        
+        // جربنا الرابط المباشر للمانجا الحديثة
         const { data } = await axios.get('https://lek-manga.net/', {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+            headers: { 
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'text/html'
+            }
         });
+        
         const $ = cheerio.load(data);
+        const mangaItems = $('.page-item-detail');
+        
+        console.log(`🔍 وجدنا ${mangaItems.length} عنصر في الصفحة`);
 
-        $('.page-item-detail').each(async (i, el) => {
+        for (let i = 0; i < mangaItems.length; i++) {
+            const el = mangaItems[i];
             const title = $(el).find('.post-title h3 a').text().trim();
             const cover = $(el).find('img').attr('data-src') || $(el).find('img').attr('src');
-            const chapterLink = $(el).find('.chapter a').first().attr('href');
             const chapterNum = $(el).find('.chapter a').first().text().trim();
 
-            if (title && chapterLink) {
-                // سحب الصفحات من داخل الفصل
-                const chPage = await axios.get(chapterLink);
-                const ch$ = cheerio.load(chPage.data);
-                let images = [];
-                ch$('.reading-content img').each((j, img) => {
-                    let src = ch$(img).attr('src')?.trim();
-                    if(src) images.push(src);
-                });
-
-                // إرسال البيانات إلى Supabase
+            if (title) {
+                console.log(`📝 محاولة حفظ: ${title}`);
                 const { error } = await supabase.from('manga').upsert({
                     title: title,
                     cover_url: cover,
                     latest_chapter: chapterNum,
-                    images_json: JSON.stringify(images),
                     updated_at: new Date()
                 }, { onConflict: 'title' });
 
-                if(!error) console.log(`✅ تم تحديث: ${title}`);
-                else console.log(`❌ خطأ في ${title}: ${error.message}`);
+                if(error) console.log(`❌ فشل في قاعدة البيانات: ${error.message}`);
+                else console.log(`✅ تم بنجاح: ${title}`);
             }
-        });
-    } catch (err) { console.error("❌ عطل:", err.message); }
+        }
+        console.log("🏁 انتهت العملية!");
+    } catch (err) {
+        console.error("❌ عطل في السحب:", err.message);
+    }
 }
 
 startScraping();
