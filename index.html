@@ -3,76 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShadowManga Pro | عالم المانجا</title>
+    <title>ShadowManga | عالم المانجا</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background: #050505; color: white; }
+        body { font-family: 'Tajawal', sans-serif; background: #050505; color: white; scroll-behavior: smooth; }
         .manga-card:hover img { transform: scale(1.05); filter: brightness(0.8); }
         .reader-view { display: none; position: fixed; inset: 0; background: black; z-index: 100; overflow-y: auto; }
     </style>
 </head>
 <body>
 
-    <div id="home">
-        <nav class="p-5 border-b border-white/5 sticky top-0 bg-black/80 backdrop-blur-md z-50 flex justify-between items-center">
-            <h1 class="text-2xl font-black text-blue-600 italic">SHADOW<span class="text-white">MANGA</span></h1>
-            <div class="bg-white/5 px-4 py-2 rounded-full border border-white/10 text-xs">البحث عن مانهوا...</div>
-        </nav>
+    <nav class="p-4 border-b border-white/5 sticky top-0 bg-black/90 backdrop-blur-md z-50 flex justify-between items-center">
+        <h1 class="text-2xl font-black text-blue-600 italic">SHADOW<span class="text-white">MANGA</span></h1>
+        <div class="flex-1 max-w-md mx-4">
+            <input type="text" id="search-input" placeholder="ابحث عن مانهوا..." class="w-full bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs outline-none focus:ring-1 ring-blue-600">
+        </div>
+        <div id="user-section">
+            <button onclick="toggleAuth()" id="login-btn" class="bg-blue-600 px-4 py-2 rounded-full text-[10px] font-bold">دخول</button>
+        </div>
+    </nav>
 
-        <main class="max-w-7xl mx-auto py-12 px-6">
-            <h3 class="text-xl font-bold mb-8 border-r-4 border-blue-600 pr-4 italic">أحدث التحديثات من مانجا ليك 🔥</h3>
-            <div id="manga-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                </div>
-        </main>
-    </div>
+    <main class="max-w-7xl mx-auto py-10 px-6">
+        <h3 class="text-lg font-bold mb-8 border-r-4 border-blue-600 pr-4 italic">أحدث الفصول المستخرجة 🔥</h3>
+        <div id="manga-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            </div>
+    </main>
 
     <div id="reader" class="reader-view">
-        <nav class="p-4 bg-black/90 border-b border-white/5 sticky top-0 flex justify-between items-center">
+        <nav class="p-4 bg-black/95 border-b border-white/5 sticky top-0 flex justify-between items-center">
             <button onclick="closeReader()" class="text-xs bg-white/10 px-4 py-2 rounded-xl">إغلاق ✕</button>
-            <div class="text-center">
-                <h2 id="r-title" class="text-sm font-bold text-blue-500">اسم المانجا</h2>
-                <p id="r-chap" class="text-[10px] text-slate-500">الفصل الحالي</p>
-            </div>
-            <button class="bg-blue-600 px-4 py-2 rounded-xl text-xs font-bold">التالي</button>
+            <div class="text-center"><h2 id="r-title" class="text-sm font-bold text-blue-500">---</h2></div>
+            <div class="w-10"></div>
         </nav>
-        <div id="pages-list" class="max-w-3xl mx-auto flex flex-col gap-1 pt-4">
-            </div>
+        <div id="pages-list" class="max-w-3xl mx-auto flex flex-col gap-1 pt-4 pb-20"></div>
     </div>
 
     <script>
-        // مصفوفة تجريبية (سيتم تعويضها ببيانات السكربت لاحقاً)
-        const demoData = [
-            { title: "One Piece", cover: "https://m.media-amazon.com/images/I/81S6o30V9VL.jpg", chapter: "1111", pages: ["https://images.shonenjump.com/7-1/1.jpg"] }
-        ];
+        // مفاتيحك الحقيقية من الصور
+        const SB_URL = 'https://dsjxjvyjscoxgnjhmnjf.supabase.co';
+        const SB_KEY = 'sb_publishable_x2I_R1S08SV5FNIpe_otAQ_5zfDCX_z9n5X9H6A4_D8';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-        function renderManga(data) {
+        // جلب البيانات وعرضها
+        async function loadManga(query = '') {
+            let request = _supabase.from('manga').select('*').order('updated_at', { ascending: false });
+            if(query) request = request.ilike('title', `%${query}%`);
+            
+            const { data, error } = await request;
+            if (error) return console.error(error);
+
             const grid = document.getElementById('manga-grid');
             grid.innerHTML = data.map(m => `
-                <div class="manga-card cursor-pointer group" onclick="openReader('${m.title}', '${m.chapter}')">
+                <div class="manga-card cursor-pointer group" onclick="openReader('${m.title}', '${m.images_json}')">
                     <div class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-white/5">
-                        <img src="${m.cover}" class="w-full h-full object-cover transition-all duration-500">
-                        <div class="absolute bottom-2 right-2 bg-blue-600 px-2 py-1 rounded-lg text-[10px] font-black italic">Ch. ${m.chapter}</div>
+                        <img src="${m.cover_url}" class="w-full h-full object-cover transition-all duration-500">
+                        <div class="absolute bottom-2 right-2 bg-blue-600 px-2 py-1 rounded-lg text-[10px] font-black italic">Ch. ${m.latest_chapter || '??'}</div>
                     </div>
-                    <h4 class="mt-3 font-bold text-sm truncate">${m.title}</h4>
+                    <h4 class="mt-3 font-bold text-[13px] truncate text-slate-200">${m.title}</h4>
                 </div>
             `).join('');
         }
 
-        function openReader(title, chapter) {
-            document.getElementById('home').style.display = 'none';
+        // نظام البحث اللحظي
+        document.getElementById('search-input').addEventListener('input', (e) => loadManga(e.target.value));
+
+        // فتح القارئ
+        function openReader(title, imagesJson) {
+            document.getElementById('home')?.style ? document.getElementById('home').style.display = 'none' : null;
             document.getElementById('reader').style.display = 'block';
             document.getElementById('r-title').innerText = title;
-            document.getElementById('r-chap').innerText = "الفصل " + chapter;
-            // هنا يتم تحميل الصور
+            
+            const list = document.getElementById('pages-list');
+            list.innerHTML = '';
+            
+            try {
+                const images = JSON.parse(imagesJson || '[]');
+                images.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.className = "w-full h-auto";
+                    img.loading = "lazy";
+                    list.appendChild(img);
+                });
+            } catch(e) { list.innerHTML = "<p class='text-center py-10'>لا توجد صفحات متوفرة حالياً</p>"; }
         }
 
         function closeReader() {
             document.getElementById('reader').style.display = 'none';
-            document.getElementById('home').style.display = 'block';
+            location.reload(); // للعودة ببساطة
         }
 
-        renderManga(demoData);
+        loadManga();
     </script>
 </body>
 </html>
