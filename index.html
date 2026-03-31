@@ -3,77 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShadowManga | عالم المانجا والمانهوا</title>
+    <title>ShadowManga Ultimate | مانجا ليك إيديت</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: white; }
-        .manga-card:hover img { transform: scale(1.1); }
-        .glass-nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
+        body { font-family: 'Tajawal', sans-serif; background-color: #050507; color: white; scroll-behavior: smooth; }
+        .manga-card:hover img { transform: scale(1.1); filter: brightness(0.7); }
+        .reader-mode { display: none; position: fixed; top: 0; left: 0; w-full: 100%; h-full: 100%; z-index: 100; background: black; overflow-y: auto; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body class="no-scrollbar">
 
-    <nav class="glass-nav fixed top-0 w-full z-50 p-4 border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-black text-blue-500 tracking-tighter">SHADOW<span class="text-white">MANGA</span></h1>
-            <div class="hidden md:flex gap-8 text-sm font-bold">
+    <div id="home-page">
+        <nav class="p-6 flex justify-between items-center border-b border-white/5 sticky top-0 bg-black/80 backdrop-blur-xl z-50">
+            <h1 class="text-3xl font-black text-blue-600 tracking-tighter">SHADOW<span class="text-white">MANGA</span></h1>
+            <div class="hidden md:flex gap-8 font-bold text-sm text-slate-400">
                 <a href="#" class="text-blue-500">الرئيسية</a>
-                <a href="#" class="hover:text-blue-400 transition">قائمة المانجا</a>
-                <a href="#" class="hover:text-blue-400 transition">أحدث الفصول</a>
+                <a href="#" class="hover:text-white transition">المانجا</a>
+                <a href="#" class="hover:text-white transition">المانهوا</a>
             </div>
-            <div class="relative">
-                <input type="text" placeholder="ابحث عن مانجا..." class="bg-slate-800 border border-white/10 px-6 py-2 rounded-full text-xs outline-none focus:border-blue-500 w-48 lg:w-64">
+            <div class="bg-white/5 px-4 py-2 rounded-full text-xs border border-white/10">بحث 🔍</div>
+        </nav>
+
+        <div class="h-[400px] relative flex items-end p-10 overflow-hidden border-b border-white/5">
+            <img src="https://images.alphacoders.com/605/605592.jpg" class="absolute inset-0 w-full h-full object-cover opacity-20" alt="Hero">
+            <div class="relative z-10 space-y-4">
+                <h2 class="text-6xl font-black italic tracking-tighter">ONE PIECE</h2>
+                <p class="text-slate-400 max-w-xl text-sm">مغامرة لوفي تستمر، الفصل الأخير متوفر الآن بجودة عالية.</p>
+                <button onclick="openReader('One Piece', 1111)" class="bg-blue-600 px-10 py-4 rounded-2xl font-black shadow-xl shadow-blue-600/20 active:scale-95 transition">اقرأ الآن ⮕</button>
             </div>
         </div>
-    </nav>
 
-    <header class="h-[450px] relative flex items-end p-10 overflow-hidden mt-16">
-        <img src="https://images.alphacoders.com/605/605592.jpg" class="absolute inset-0 w-full h-full object-cover opacity-30" alt="Hero">
-        <div class="relative z-10 max-w-2xl space-y-4 animate__animated animate__fadeInUp">
-            <span class="bg-blue-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">الأكثر قراءة</span>
-            <h2 class="text-6xl font-black italic">ONE PIECE</h2>
-            <p class="text-slate-400 text-sm leading-relaxed">انطلق في مغامرة ملك القراصنة القادم، الفصل الأخير متوفر الآن حصرياً.</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-2xl font-black transition shadow-xl shadow-blue-600/20">اقرأ الفصل 1111</button>
-        </div>
-    </header>
+        <main class="max-w-7xl mx-auto py-16 px-6">
+            <h3 class="text-2xl font-black mb-10 border-r-4 border-blue-600 pr-4 italic uppercase">أحدث الفصول 🔥</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                
+                <div class="manga-card group cursor-pointer" onclick="openReader('Legend of Star General', 250)">
+                    <div class="relative aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-4 border border-white/5 shadow-2xl transition-all">
+                        <img src="https://m.media-amazon.com/images/I/81S6o30V9VL.jpg" class="w-full h-full object-cover transition-transform duration-700">
+                        <div class="absolute bottom-4 right-4 bg-blue-600 px-3 py-1 rounded-xl text-[10px] font-black shadow-lg">Ch. 250</div>
+                    </div>
+                    <h4 class="font-bold text-sm truncate group-hover:text-blue-500 transition">Legend of Star General</h4>
+                    <p class="text-[10px] text-slate-500 mt-1 font-bold">Action • Sci-fi</p>
+                </div>
 
-    <main class="max-w-7xl mx-auto py-16 px-4">
-        <div class="flex justify-between items-center mb-10">
-            <h3 class="text-2xl font-black border-r-4 border-blue-600 pr-4 italic uppercase tracking-tighter">أحدث التحديثات 🔥</h3>
-            <a href="#" class="text-xs text-blue-500 font-bold hover:underline">عرض الكل</a>
+            </div>
+        </main>
+    </div>
+
+    <div id="manga-reader" class="reader-mode no-scrollbar">
+        <div class="fixed top-0 w-full bg-black/90 p-4 border-b border-white/5 flex justify-between items-center z-[110]">
+            <button onclick="closeReader()" class="bg-white/10 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-600 transition">إغلاق ✕</button>
+            <div class="text-center">
+                <h2 id="reader-title" class="text-sm font-black text-blue-500 uppercase tracking-widest">---</h2>
+                <p id="reader-chapter" class="text-[10px] text-slate-500 font-bold tracking-tighter">فصل رقم ---</p>
+            </div>
+            <button class="bg-blue-600 px-4 py-2 rounded-xl text-xs font-bold shadow-lg">التالي</button>
         </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" id="manga-list">
-            <div class="manga-card group cursor-pointer animate__animated animate__fadeIn">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] mb-3 shadow-2xl border border-white/5">
-                    <img src="https://m.media-amazon.com/images/I/81S6o30V9VL._AC_UF1000,1000_QL80_.jpg" class="w-full h-full object-cover transition-transform duration-700" alt="Manga">
-                    <div class="absolute bottom-3 right-3 bg-blue-600 px-3 py-1 text-[10px] font-black rounded-lg shadow-lg">الفصل 1111</div>
-                </div>
-                <h4 class="font-bold text-sm truncate group-hover:text-blue-500 transition">One Piece</h4>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="text-[10px] text-yellow-500 font-bold">⭐ 4.9</span>
-                    <span class="text-[10px] text-slate-500 uppercase">Action</span>
-                </div>
+
+        <div id="pages-container" class="max-w-3xl mx-auto flex flex-col gap-1 pt-24 pb-20">
             </div>
 
-            <div class="manga-card group cursor-pointer animate__animated animate__fadeIn" style="animation-delay: 0.1s">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] mb-3 shadow-2xl border border-white/5">
-                    <img src="https://m.media-amazon.com/images/I/91pLz6-y0eL._AC_UF1000,1000_QL80_.jpg" class="w-full h-full object-cover transition-transform duration-700" alt="Manga">
-                    <div class="absolute bottom-3 right-3 bg-blue-600 px-3 py-1 text-[10px] font-black rounded-lg shadow-lg">الفصل 255</div>
-                </div>
-                <h4 class="font-bold text-sm truncate group-hover:text-blue-500 transition">Jujutsu Kaisen</h4>
-                <p class="text-[10px] text-slate-500 uppercase font-bold">Shonen</p>
-            </div>
+        <div class="p-10 text-center bg-black border-t border-white/5">
+            <button onclick="closeReader()" class="text-slate-500 underline text-xs">العودة للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        // دالة فتح القارئ وجلب الصور (الذكاء البرمجي)
+        function openReader(title, chapter) {
+            document.getElementById('home-page').style.display = 'none';
+            const reader = document.getElementById('manga-reader');
+            reader.style.display = 'block';
             
-            </div>
-    </main>
+            document.getElementById('reader-title').innerText = title;
+            document.getElementById('reader-chapter').innerText = "الفصل " + chapter;
 
-    <footer class="p-20 text-center border-t border-white/5 text-slate-600 text-xs">
-        <p>© 2026 SHADOW MANGA - مبرمج مجهول (بصفر درهم)</p>
-        <p class="mt-2 opacity-50 font-mono italic">Crafted with Code & Passion</p>
-    </footer>
+            // روابط الصور (هنا تضع روابط الصور التي تأخذها من الموقع الآخر)
+            const container = document.getElementById('pages-container');
+            container.innerHTML = ''; // تنظيف الصور القديمة
+
+            // مثال لصور تجريبية (يجب استبدالها بروابط حقيقية منMangalek)
+            const demoImages = [
+                "https://images.shonenjump.com/7-1/1.jpg",
+                "https://images.shonenjump.com/7-1/2.jpg",
+                "https://images.shonenjump.com/7-1/3.jpg"
+            ];
+
+            demoImages.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = "w-full h-auto mb-1 opacity-0 transition-opacity duration-1000";
+                img.onload = () => img.style.opacity = 1; // تأثير ظهور تدريجي
+                container.appendChild(img);
+            });
+            
+            window.scrollTo(0, 0);
+        }
+
+        function closeReader() {
+            document.getElementById('manga-reader').style.display = 'none';
+            document.getElementById('home-page').style.display = 'block';
+        }
+    </script>
 
 </body>
 </html>
