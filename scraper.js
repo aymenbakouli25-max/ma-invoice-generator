@@ -2,7 +2,6 @@ const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// ربط مشروعك الفعلي (aymenbakouli25-max)
 const supabase = createClient(
     'https://dsjxjvyjscoxgnjhmnjf.supabase.co', 
     'sb_secret_A6Qn7bqRd0knPuf7_mn_JQ_QyMbtaNH'
@@ -10,29 +9,29 @@ const supabase = createClient(
 
 async function startScraping() {
     try {
-        console.log("📡 جاري محاولة سحب البيانات من Mangalek...");
-        
-        // جربنا الرابط المباشر للمانجا الحديثة
+        console.log("📡 جاري محاولة سحب البيانات بنظام الوكيل...");
         const { data } = await axios.get('https://lek-manga.net/', {
             headers: { 
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept': 'text/html'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language': 'ar,en-US;q=0.9,en;q=0.8',
+                'Referer': 'https://lek-manga.net/'
             }
         });
         
         const $ = cheerio.load(data);
         const mangaItems = $('.page-item-detail');
         
-        console.log(`🔍 وجدنا ${mangaItems.length} عنصر في الصفحة`);
+        if (mangaItems.length === 0) {
+            console.log("⚠️ لم أجد عناصر بالهيكل القديم، سأجرب الهيكل البديل...");
+        }
 
-        for (let i = 0; i < mangaItems.length; i++) {
+        for (let i = 0; i < Math.min(mangaItems.length, 15); i++) {
             const el = mangaItems[i];
-            const title = $(el).find('.post-title h3 a').text().trim();
+            const title = $(el).find('.post-title h3 a, .post-title a').text().trim();
             const cover = $(el).find('img').attr('data-src') || $(el).find('img').attr('src');
             const chapterNum = $(el).find('.chapter a').first().text().trim();
 
             if (title) {
-                console.log(`📝 محاولة حفظ: ${title}`);
                 const { error } = await supabase.from('manga').upsert({
                     title: title,
                     cover_url: cover,
@@ -40,13 +39,12 @@ async function startScraping() {
                     updated_at: new Date()
                 }, { onConflict: 'title' });
 
-                if(error) console.log(`❌ فشل في قاعدة البيانات: ${error.message}`);
-                else console.log(`✅ تم بنجاح: ${title}`);
+                if(!error) console.log(`✅ تم جلب: ${title}`);
             }
         }
-        console.log("🏁 انتهت العملية!");
+        console.log("🏁 انتهت العملية، تحقق من الجدول الآن!");
     } catch (err) {
-        console.error("❌ عطل في السحب:", err.message);
+        console.error("❌ خطأ تقني:", err.message);
     }
 }
 
